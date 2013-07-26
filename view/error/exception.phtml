@@ -16,9 +16,10 @@
     <style>
         #error-manager pre {
             font-size: 12px;
+            margin-bottom: 0;
         }
         #error-manager pre .active {
-            background-color: #f2dede;
+            background-color: #fcf8e3;
         }
         #error-manager li {
             line-height: 17px;
@@ -85,7 +86,7 @@
                                         <?php endif ?>
                                         <p class="well"><?= $this->errTraceMethod($trace) ?></p>
                                         <?php if (isset($trace['line'])): ?>
-                                            <pre class="prettyprint  linenums:<?= key($trace['context']) ?> linenums" data-active-line="<?= $trace['line'] ?>">
+                                            <pre class="prettyprint  linenums:<?= (key($trace['context']) + 1) ?> linenums" data-active-line="<?= $trace['line'] ?>">
 <?= implode($trace['context']) ?>
 </pre>
                                         <?php endif ?>
@@ -109,7 +110,7 @@
                             activeLine = parseInt($(this).attr('data-active-line')),
                             firstLine  = parseInt(lines.first().attr('value'));
 
-                        lines.eq((activeLine - firstLine) - 1).addClass('active');
+                        lines.eq(activeLine - firstLine).addClass('active');
                     });
                 }
             });
