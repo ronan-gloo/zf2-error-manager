@@ -8,7 +8,7 @@ use Zend\View\Helper\AbstractHelper;
  * Class fileName
  * @package ErrorManager\View
  */
-class fileName extends AbstractHelper
+class FileName extends AbstractHelper
 {
     /**
      * @param string $filename
