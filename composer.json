@@ -1,0 +1,23 @@
+{
+    "name":        "ronan-gloo/zf2-error-manager",
+    "description": "Error manager for zend framework 2",
+    "keywords":    ["ZF2", "error", "exception", "module"],
+    "type": "library",
+    "license": "MIT",
+    "authors":     [
+        {
+            "name":  "ronan-gloo"
+        }
+    ],
+    "require":     {
+        "php": ">=5.4",
+        "zendframework/zend-modulemanager": "2.*",
+        "zendframework/zend-eventmanager": "2.*",
+        "zendframework/zend-servicemanager": "2.*"
+    },
+    "autoload":    {
+        "psr-0": {
+            "ErrorManager": "src/"
+        }
+    }
+}

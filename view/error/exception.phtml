@@ -1,0 +1,153 @@
+<?php if (! empty($this->display_exceptions)): ?>
+
+    <?php if (isset($this->exception['options']['assets']['css'])): ?>
+        <?php foreach ($this->exception['options']['assets']['css'] as $css): ?>
+            <?= $this->headLink()->appendStylesheet($css) ?>
+        <?php endforeach ?>
+    <?php endif ?>
+
+    <?php if (isset($this->exception['options']['assets']['js'])): ?>
+        <?php foreach ($this->exception['options']['assets']['js'] as $js): ?>
+            <?= $this->headScript()->appendFile($js) ?>
+        <?php endforeach ?>
+    <?php endif ?>
+
+    <style>
+        #error-manager .accordion a {
+            text-decoration: none;
+        }
+        #error-manager .accordion .linenum {
+            display: inline-block;
+            width: 45px;
+            text-align: center;
+        }
+        #error-manager .well,
+        #error-manager .alert {
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        #error-manager .accordion-inner .alert {
+            font-size: 12px;
+            line-height: 15px;
+        }
+        #error-manager .code-block {
+            border: 1px solid #e1e1e1;
+            border-radius: 3px;
+        }
+        #error-manager .line-content pre {
+            margin: 0;
+            border: none;
+            background: none;
+            padding: 0;
+            color: #48484c;
+        }
+        #error-manager .line {
+            background-color: #f5f5f5;
+        }
+        #error-manager .line-content pre,
+        #error-manager .line > div {
+            height: 15px;
+            line-height: 15px;
+            font-size: 12px;
+        }
+        #error-manager .line > div {
+            padding: 2px;
+        }
+        #error-manager div.line-count {
+            clear: left;
+            float: left;
+            width: 30px;
+            color: #bebec5;
+            background-color: #fff;
+            border-right: 1px solid #e1e1e1;
+            font-size: 12px;
+            text-align: center;
+        }
+        #error-manager .line-content {
+            margin-left: 35px;
+            font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+        }
+        #error-manager .line-content:hover {
+            background-color: #f1f1f1;
+        }
+        #error-manager .line.active .line-content {
+            background-color: #f2dede;
+        }
+        #error-manager .line.active .line-count {
+            color: #840000;
+        }
+        #error-manager .title {
+            padding: 10px;
+        }
+        #error-manager .title .lead {
+            margin-bottom: 0;
+        }
+        #error-manager .title h3 {
+            line-height: 30px;
+        }
+    </style>
+
+    <div id="error-manager">
+        <?php foreach ($this->exception['exceptions'] as $eKey => $exception): ?>
+            <section>
+                <header>
+                    <div class="well title">
+                        <h3 class="text-error"><?= $exception['name'] ?></h3>
+                        <div class="lead muted"><?= $exception['message'] ?></div>
+                    </div>
+                </header>
+
+                <?php if ($exception['documentation']): ?>
+                    <div class="alert alert-success">
+                        <?= nl2br($exception['documentation']) ?>
+                    </div>
+                <?php endif ?>
+
+                <?php if ($exception['trace']): ?>
+                    <div class="accordion" id="acc<?= $eKey ?>">
+                        <?php foreach($exception['trace'] as $key => $trace): ?>
+                            <div class="accordion-group">
+
+                                <div class="accordion-heading clearfix">
+                                    <span class="accordion-toggle" data-toggle="collapse" data-parent="#acc<?= $eKey ?>" href="#trace<?= $eKey.$key?>-content">
+                                        <small class="linenum label label-info">@<?= $trace['line'] ?></small>
+                                        <a href="">
+                                            <?= $this->errFileName($trace['file']) ?>
+                                        </a>
+                                    </span>
+                                </div>
+
+                                <div id="trace<?= $eKey.$key?>-content" class="accordion-body collapse">
+                                    <div class="accordion-inner">
+                                        <?php if ($trace['documentation']): ?>
+                                            <header class="alert alert-info">
+                                                <?= nl2br($trace['documentation']) ?>
+                                            </header>
+                                        <?php endif ?>
+                                        <p class="well"><?= $this->errTraceMethod($trace) ?></p>
+                                        <?php if (isset($trace['line'])): ?>
+                                            <article class="code-block">
+                                                <?php foreach($trace['context'] as $line => $code): ?>
+                                                    <?php $class = ($line + 1) == $trace['line'] ? 'active' : '' ?>
+                                                    <div class="line <?= $class ?>">
+                                                        <div class="line-count">
+                                                            <?= $line + 1 ?>
+                                                        </div>
+                                                        <div class="line-content">
+                                                            <pre><?= $code ?></pre>
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach ?>
+                                            </article>
+                                        <?php endif ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach ?>
+                    </div>
+                <?php endif ?>
+
+            </section>
+        <?php endforeach ?>
+    </div>
+<?php endif ?>
