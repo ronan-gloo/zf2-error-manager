@@ -22,11 +22,14 @@ return [
         // Extra assets
         'assets' =>
         [
-            //'css' => ['//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css'],
+            'css' => [
+                //'//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css'
+                'http://twitter.github.io/bootstrap/assets/js/google-code-prettify/prettify.css'
+            ],
             'js'  =>
             [
                 //'//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js'
-                'https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js'
+                'http://twitter.github.io/bootstrap/assets/js/google-code-prettify/prettify.js'
             ]
         ]
     ],
