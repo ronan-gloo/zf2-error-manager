@@ -127,17 +127,9 @@
                                         <p class="well"><?= $this->errTraceMethod($trace) ?></p>
                                         <?php if (isset($trace['line'])): ?>
                                             <article class="code-block">
-                                                <?php foreach($trace['context'] as $line => $code): ?>
-                                                    <?php $class = ($line + 1) == $trace['line'] ? 'active' : '' ?>
-                                                    <div class="line <?= $class ?>">
-                                                        <div class="line-count">
-                                                            <?= $line + 1 ?>
-                                                        </div>
-                                                        <div class="line-content">
-                                                            <pre><?= $code ?></pre>
-                                                        </div>
-                                                    </div>
-                                                <?php endforeach ?>
+                                                <pre class="prettyprint linenum:<?= key($trace['context']) ?>">
+                                                    <?= implode("\n", $trace['context']) ?>
+                                                </pre>
                                             </article>
                                         <?php endif ?>
                                     </div>

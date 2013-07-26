@@ -18,6 +18,9 @@
     "autoload":    {
         "psr-0": {
             "ErrorManager": "src/"
-        }
+        },
+        "classmap": [
+            "./Module.php"
+        ]
     }
 }
