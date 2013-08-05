@@ -24,21 +24,26 @@ return [
         [
             'css' => [
                 //'//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css'
-                'http://twitter.github.io/bootstrap/assets/js/google-code-prettify/prettify.css'
+                'http://demo.stanleyhlng.com/prettify-js/assets/themes/bootstrap-light/prettify.css'
             ],
             'js'  =>
             [
                 //'//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js'
-                'http://twitter.github.io/bootstrap/assets/js/google-code-prettify/prettify.js'
+                'http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js'
             ]
         ]
     ],
 
     'service_manager' =>
     [
-        'factories' =>
+        'invokables' =>
         [
-            'errormanager.listener' => 'ErrorManager\Factory',
+            'errormanager.formatter.exception' => 'ErrorManager\Formatter\ExceptionFormatter',
+            'errormanager.formatter.route'     => 'ErrorManager\Formatter\RouteFormatter',
+        ],
+        'factories'  =>
+        [
+            'errormanager.listener'            => 'ErrorManager\Factory',
         ]
     ],
 
@@ -47,6 +52,7 @@ return [
         'template_map' =>
         [
             'error/index' => __DIR__ . '/../view/error/exception.phtml',
+            'error/404'   => __DIR__ . '/../view/error/404.phtml',
         ],
     ],
 

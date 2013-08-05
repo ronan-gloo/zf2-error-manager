@@ -25,7 +25,7 @@ class ExceptionFormatter implements FormatterInterface
      *
      * @return array
      */
-    public function format(\Exception $exception, array $options)
+    public function format($exception, array $options)
     {
         $prevCount  = 0;
         $prevLength = $options['displayPrevious'];

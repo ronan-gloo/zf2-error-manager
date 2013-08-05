@@ -1,0 +1,104 @@
+<div id="page-404">
+
+    <hgroup class="alert alert-error">
+        <h2><?php echo $this->translate('A 404 error occurred') ?></h2>
+        <h4><?php echo $this->message ?></h4>
+    </hgroup>
+
+    <article>
+        <table class="table">
+            <caption><?= $this->translate('Request information') ?></caption>
+            <tbody>
+                <tr>
+                    <td class="span2"><?= $this->translate('Hostname') ?></td>
+                    <td>
+                        <code class="text-info"><?= $uri['scheme'] ?></code>
+                        <code class="text-info"><?= $uri['host'] ?></code>
+                        <code class="muted"><?= $uri['port'] ?></code>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="span2"><?= $this->translate('Request Uri') ?></td>
+                    <td>
+                        <code class="text-success"><?= $request['method'] ?></code>
+                        <code><?= $uri['path'] ?></code>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="span2"><?= $this->translate('Current locale') ?></td>
+                    <td><code><?= $locale ?></code></td>
+                </tr>
+                <?php if ($params['get']): ?>
+                    <tr>
+
+                        <td class="span2"><?= $this->translate('GET parameters') ?></td>
+                        <td>
+                            <table class="table table-bordered">
+                                <tbody>
+                                <?php foreach ($params['get']  as $name => $parameter): ?>
+                                    <tr>
+                                        <td class="span1 muted"><?= $name ?></span></td>
+                                        <td class="text-warning"><?= $parameter ?></td>
+                                    </tr>
+                                <?php endforeach ?>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                <?php endif ?>
+                <?php if ($params['post']): ?>
+                    <tr>
+                        <td class="span2"><?= $this->translate('POST parameters') ?></td>
+                        <td>
+                            <table class="table table-bordered">
+                                <tbody>
+                                <?php foreach ($params['post']  as $name => $parameter): ?>
+                                    <tr>
+                                        <td class="span1 muted"><?= $name ?></span></td>
+                                        <td class="text-warning"><?= $parameter ?></td>
+                                    </tr>
+                                <?php endforeach ?>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                <?php endif ?>
+            </tbody>
+        </table>
+
+        <table class="table">
+            <caption><?= $this->translate('Router information') ?></caption>
+            <tbody>
+                <tr>
+                    <td class="span2"><?= $this->translate('Router class') ?></td>
+                    <td class="text-info"><?= $router['class_name'] ?></td>
+                </tr>
+                <tr>
+                    <td class="span2"><?= $this->translate('Registered routes') ?></td>
+                    <td><span class="label"><?= $router['count'] ?></span></td>
+                </tr>
+                <?php if ($router['default_parameters']): ?>
+                    <tr>
+                        <td class="span2">
+                            <?= $this->translate('Global Parameters') ?>
+                        </td>
+                        <td>
+                            <table class="table table-bordered">
+                                <tbody>
+                                <?php foreach ($router['default_parameters']  as $name => $parameter): ?>
+                                    <tr>
+                                        <td class="span1 muted"><?= $name ?></span></td>
+                                        <td class="text-warning"><?= $parameter ?></td>
+                                    </tr>
+                                <?php endforeach ?>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                <?php endif ?>
+            </tbody>
+        </table>
+
+    </article>
+
+</div>

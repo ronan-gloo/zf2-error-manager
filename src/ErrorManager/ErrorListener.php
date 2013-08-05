@@ -11,6 +11,7 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\Mvc\Application;
 use Zend\Mvc\MvcEvent;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Class ErrorManager
@@ -20,6 +21,7 @@ class ErrorListener implements ListenerAggregateInterface, EventManagerAwareInte
 {
     use ListenerAggregateTrait;
     use EventManagerAwareTrait;
+    use ServiceLocatorAwareTrait;
 
     /**
      * Error level to none
@@ -41,11 +43,6 @@ class ErrorListener implements ListenerAggregateInterface, EventManagerAwareInte
      * @var int
      */
     protected $convertError = self::E_NONE;
-
-    /**
-     * @var Formatter\FormatterInterface
-     */
-    protected $formatter;
 
     /**
      * Setup options if any
@@ -72,8 +69,9 @@ class ErrorListener implements ListenerAggregateInterface, EventManagerAwareInte
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH_ERROR, [$this, 'onEventError'], 100);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER_ERROR, [$this, 'onEventError'], 100);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH_ERROR, [$this, 'onException'], 100);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH_ERROR, [$this, 'onRouteNotFound'], -1);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER_ERROR, [$this, 'onException'], 100);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onEvent'], -1);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER, [$this, 'onEvent'], -1);
     }
@@ -265,26 +263,6 @@ class ErrorListener implements ListenerAggregateInterface, EventManagerAwareInte
     }
 
     /**
-     * @param \ErrorManager\Formatter\FormatterInterface $formatter
-     *
-     * @return $this
-     */
-    public function setFormatter(FormatterInterface $formatter)
-    {
-        $this->formatter = $formatter;
-
-        return $this;
-    }
-
-    /**
-     * @return \ErrorManager\Formatter\FormatterInterface
-     */
-    public function getFormatter()
-    {
-        return $this->formatter;
-    }
-
-    /**
      * Capture Error converted to exception, then trigger a dispatch error
      * @param MvcEvent $e
      */
@@ -306,16 +284,37 @@ class ErrorListener implements ListenerAggregateInterface, EventManagerAwareInte
      *
      * @param MvcEvent $e
      */
-    public function onEventError(MvcEvent $e)
+    public function onException(MvcEvent $e)
     {
         switch ($e->getError())
         {
             case Application::ERROR_EXCEPTION:
+
+                $formatter = $this->getServiceLocator()->get('errormanager.formatter.exception');
                 $exception = $e->getParam('exception');
-                $content['exceptions'] = $this->getFormatter()->format($exception, $this->options);
+
+                $content['exceptions'] = $formatter->format($exception, $this->options);
                 $content['options']    = $this->options;
+
                 // The View exception strategy inject the 'exception' event parameter to the view
                 $e->setParam('exception', $content);
+                break;
+        }
+    }
+
+    /**
+     * Capture the router not match event
+     *
+     * @param MvcEvent $e
+     */
+    public function onRouteNotFound(MvcEvent $e)
+    {
+        switch ($e->getError())
+        {
+            case Application::ERROR_ROUTER_NO_MATCH:
+                $formatter = $this->getServiceLocator()->get('errormanager.formatter.route');
+                $data      = $formatter->format($e, $this->options);
+                $e->getResult()->setVariables($data);
                 break;
         }
     }

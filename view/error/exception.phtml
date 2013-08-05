@@ -86,7 +86,7 @@
                                         <?php endif ?>
                                         <p class="well"><?= $this->errTraceMethod($trace) ?></p>
                                         <?php if (isset($trace['line'])): ?>
-                                            <pre class="prettyprint  linenums:<?= (key($trace['context']) + 1) ?> linenums" data-active-line="<?= $trace['line'] ?>">
+                                            <pre class="prettyprint linenums:<?= (key($trace['context']) + 1) ?> linenums lang-php" data-active-line="<?= $trace['line'] ?>">
 <?= implode($trace['context']) ?>
 </pre>
                                         <?php endif ?>

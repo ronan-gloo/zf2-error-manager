@@ -8,5 +8,5 @@ namespace ErrorManager\Formatter;
  */
 interface FormatterInterface
 {
-    public function format(\Exception $exception, array $options);
+    public function format($object, array $options);
 }

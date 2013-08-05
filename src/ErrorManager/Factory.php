@@ -15,13 +15,13 @@ class Factory implements FactoryInterface
     /**
      * Create service
      *
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param ServiceLocatorInterface $locator
      *
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $locator)
     {
-        $config  = $serviceLocator->get('config');
+        $config  = $locator->get('config');
         $service = new ErrorListener;
 
         if (isset($config['error_manager']))
@@ -29,9 +29,10 @@ class Factory implements FactoryInterface
             $service->fromArray($config['error_manager']);
         }
 
+        $eventManager = $locator->get('application')->getEventManager();
         $service
-            ->setFormatter(new ExceptionFormatter)
-            ->setEventManager($serviceLocator->get('application')->getEventManager())
+            ->setServiceLocator($locator)
+            ->setEventManager($eventManager)
         ;
 
         return $service;
