@@ -1,13 +1,13 @@
 <?php if (! empty($this->display_exceptions)): ?>
 
-    <?php if (isset($this->exception['options']['assets']['js'])): ?>
-        <?php foreach ($this->exception['options']['assets']['js'] as $js): ?>
+    <?php if (isset($this->data['options']['assets']['js'])): ?>
+        <?php foreach ($this->data['options']['assets']['js'] as $js): ?>
             <?= $this->headScript()->appendFile($js) ?>
         <?php endforeach ?>
     <?php endif ?>
 
-    <?php if (isset($this->exception['options']['assets']['css'])): ?>
-        <?php foreach ($this->exception['options']['assets']['css'] as $css): ?>
+    <?php if (isset($data['options']['assets']['css'])): ?>
+        <?php foreach ($data['options']['assets']['css'] as $css): ?>
             <?= $this->headLink()->appendStylesheet($css) ?>
         <?php endforeach ?>
     <?php endif ?>
@@ -48,7 +48,7 @@
     </style>
 
     <div id="error-manager">
-        <?php foreach ($this->exception['exceptions'] as $eKey => $exception): ?>
+        <?php foreach ($this->data['exceptions'] as $eKey => $exception): ?>
             <section>
                 <header>
                     <div class="well title">

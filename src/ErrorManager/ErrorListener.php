@@ -69,9 +69,9 @@ class ErrorListener implements ListenerAggregateInterface, EventManagerAwareInte
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH_ERROR, [$this, 'onException'], 100);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH_ERROR, [$this, 'onException'], -1);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH_ERROR, [$this, 'onRouteNotFound'], -1);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER_ERROR, [$this, 'onException'], 100);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER_ERROR, [$this, 'onException'], -1);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onEvent'], -1);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER, [$this, 'onEvent'], -1);
     }
@@ -297,7 +297,7 @@ class ErrorListener implements ListenerAggregateInterface, EventManagerAwareInte
                 $content['options']    = $this->options;
 
                 // The View exception strategy inject the 'exception' event parameter to the view
-                $e->setParam('exception', $content);
+                $e->getResult()->setVariable('data', $content);
                 break;
         }
     }
