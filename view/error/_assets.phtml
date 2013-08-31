@@ -1,0 +1,26 @@
+<?php if (isset($options['assets']['js'])): ?>
+    <?php foreach ($options['assets']['js'] as $js): ?>
+        <?= $this->headScript()->appendFile($js) ?>
+    <?php endforeach ?>
+<?php endif ?>
+
+<?php if (isset($options['assets']['css'])): ?>
+    <?php foreach ($options['assets']['css'] as $css): ?>
+        <?= $this->headLink()->appendStylesheet($css) ?>
+    <?php endforeach ?>
+<?php endif ?>
+<style>
+    #error-manager pre {
+        font-size: 12px;
+        margin-bottom: 0;
+    }
+    #error-manager pre .active {
+        background-color: #fcf8e3;
+    }
+    #error-manager li {
+        line-height: 17px;
+    }
+    #error-manager ol {
+        padding-left: 0;
+    }
+</style>

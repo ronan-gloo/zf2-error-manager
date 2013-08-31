@@ -17,18 +17,9 @@ class FileName extends AbstractHelper
      */
     public function __invoke($filename)
     {
-        return $this->format($filename);
-    }
-
-    /**
-     * @param string $filename
-     *
-     * @return string
-     */
-    public function format($filename)
-    {
+        $dir      = getcwd();
         $baseName = basename($filename);
-        $filePath = substr($filename, strlen(getcwd()));
+        $filePath = strpos($filename, $dir) !== false ? substr($filename, strlen($dir)) : $filename;
         $filePath = ltrim(str_replace($baseName, '', $filePath), '/');
 
         return sprintf('<code class="text-info">%s</code> <code>%s</code>', $filePath, $baseName);

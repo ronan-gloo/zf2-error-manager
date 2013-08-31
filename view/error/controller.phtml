@@ -1,0 +1,112 @@
+<?php if (! empty($this->display_exceptions)): ?>
+
+    <?php require __DIR__ . '/_assets.phtml' ?>
+
+    <style type="text/css">
+        #error-manager .unstyled span {
+            display: inline-block;
+            width  : 140px;
+        }
+    </style>
+
+    <article id="error-manager" class="panel panel-danger">
+
+        <header class="panel-heading">
+            <h3><?= $this->translate($title) ?></h3>
+            <?= $this->translate($subtitle) ?>
+        </header>
+
+        <div class="panel-body">
+
+            <h4><?= $this->translate('Details') ?></h4>
+            <ul class="unstyled">
+                <li>
+                    <span><?= $this->translate('Route name') ?></span>
+                    <code class="text-info"><?= $route['name'] ?></code>
+                </li>
+                <li>
+                    <span><?= $this->translate('Route type') ?></span>
+                    <code class="text-info"><?= $route['class'] ?></code>
+                </li>
+                <li>
+                    <span><?= $this->translate('Event name') ?></span>
+                    <code class="text-info"><?= $event['name'] ?></code>
+                </li>
+                <li>
+                    <span><?= $this->translate('Event error name') ?></span>
+                    <code class="text-info"><?= $event['error'] ?></code>
+                </li>
+            </ul>
+
+            <hr>
+
+            <h4><?= $this->translate('Route parameters') ?></h4>
+            <ul class="unstyled">
+                <?php foreach ($route['params'] as $name => $param): ?>
+                    <li>
+                        <span><?= $name ?></span>
+                        <code class="text-info"><?= $param ?></code>
+                    </li>
+                <?php endforeach ?>
+            </ul>
+
+            <hr>
+
+            <?php if ($controller['names']): ?>
+                <h4><?= $this->translate('Available controllers') ?></h4>
+                <pre class="prettyprint linenums lang-php">
+<?= var_export($controller['names']) ?>
+ </pre>
+                <hr>
+            <?php endif ?>
+
+            <?php if ($route['assembled']): ?>
+                <h4><?= $this->translate('Assembled Route parameters') ?></h4>
+                <ul class="unstyled">
+                    <?php foreach ($router['assembled'] as $name => $param): ?>
+                        <li>
+                            <span><?= $name ?></span>
+                            <code><?= $param ?></code>
+                        </li>
+                    <?php endforeach ?>
+                </ul>
+
+                <hr>
+            <?php endif ?>
+
+            <?php if (isset($controller['context']['methods'])): ?>
+                <h4><?= $this->translate('Available actions') ?></h4>
+                <ul class="unstyled">
+                    <?php foreach ($controller['context']['methods'] as $method): ?>
+                        <li><code><?= $method ?></code></li>
+                    <?php endforeach ?>
+                </ul>
+
+                <hr>
+            <?php endif ?>
+
+            <?php if (isset($controller['context']['file'])): ?>
+                <?php if ($controller['context']['doc']): ?>
+                    <div class="alert alert-success">
+                        <?= nl2br(trim($controller['context']['doc'])) ?>
+                    </div>
+                <?php endif ?>
+                <pre class="prettyprint linenums lang-php">
+<?= implode($controller['context']['file']) ?>
+ </pre>
+            <?php endif ?>
+
+            <?php if ($route['definition']): ?>
+                <h4><?= $this->translate('Route definitions') ?></h4>
+<pre class="prettyprint linenums lang-php">
+<?= var_export($route['definition']) ?>
+ </pre>
+            <?php endif ?>
+
+        </div>
+
+    </article>
+
+    <?php require __DIR__ . '/_footer.phtml' ?>
+
+<?php endif ?>

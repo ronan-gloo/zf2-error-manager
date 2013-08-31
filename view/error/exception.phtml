@@ -1,119 +1,94 @@
 <?php if (! empty($this->display_exceptions)): ?>
 
-    <?php if (isset($this->data['options']['assets']['js'])): ?>
-        <?php foreach ($this->data['options']['assets']['js'] as $js): ?>
-            <?= $this->headScript()->appendFile($js) ?>
-        <?php endforeach ?>
-    <?php endif ?>
-
-    <?php if (isset($data['options']['assets']['css'])): ?>
-        <?php foreach ($data['options']['assets']['css'] as $css): ?>
-            <?= $this->headLink()->appendStylesheet($css) ?>
-        <?php endforeach ?>
-    <?php endif ?>
-
+    <?php require __DIR__ . '/_assets.phtml' ?>
 
     <style>
-        #error-manager pre {
-            font-size: 12px;
-            margin-bottom: 0;
-        }
-        #error-manager pre .active {
-            background-color: #fcf8e3;
-        }
         #error-manager li {
             line-height: 17px;
         }
-        #error-manager .accordion a {
+        #error-manager .panel a {
             text-decoration: none;
         }
-        #error-manager .well,
         #error-manager .alert {
             margin-bottom: 10px;
             padding: 10px;
         }
-        #error-manager .accordion-inner .alert {
+        #error-manager .panel-heading {
+            padding: 5px;
+        }
+        #error-manager .panel .alert {
             font-size: 12px;
             line-height: 15px;
         }
-        #error-manager .title {
-            padding: 10px;
-        }
-        #error-manager .title .lead {
-            margin-bottom: 0;
-        }
-        #error-manager .title h3 {
-            line-height: 30px;
+        #error-manager h3 {
+            margin-top: 10px;
         }
     </style>
 
     <div id="error-manager">
         <?php foreach ($this->data['exceptions'] as $eKey => $exception): ?>
-            <section>
-                <header>
-                    <div class="well title">
-                        <h3 class="text-error"><?= $exception['name'] ?></h3>
-                        <div class="lead muted"><?= $exception['message'] ?></div>
+            <section class="panel panel-danger">
+                <header class="panel-heading clearfix">
+                    <div class="pull-left">
+                        <h3><?= $eKey+1 ?>. <?= $exception['name'] ?></h3>
+                        <?= $exception['message'] ?>
+                    </div>
+                    <div class="pull-right">
+                        <h3>
+                            <a class="btn btn-sm btn-primary"
+                               href="<?= sprintf('https://github.com/vaconsulting/foyer/issues/new?title=%s&body=%s', $exception['name'], $exception['message'])?>"
+                               target="_blank"
+                               >
+                                <i class="glyphicon glyphicon-export"></i>
+                                <?= $this->translate('Report on Github') ?>
+                            </a>
+                        </h3>
                     </div>
                 </header>
 
-                <?php if ($exception['documentation']): ?>
-                    <div class="alert alert-success">
-                        <?= nl2br($exception['documentation']) ?>
-                    </div>
-                <?php endif ?>
+                <article class="panel-body">
+                    <?php if ($exception['documentation']): ?>
+                        <div class="alert alert-success">
+                            <?= nl2br($exception['documentation']) ?>
+                        </div>
+                    <?php endif ?>
 
-                <?php if ($exception['trace']): ?>
-                    <div class="accordion" id="acc<?= $eKey ?>">
-                        <?php foreach($exception['trace'] as $key => $trace): ?>
-                            <div class="accordion-group">
+                    <?php if ($exception['trace']): ?>
+                        <div class="panel-group" id="acc<?= $eKey ?>">
+                            <?php foreach($exception['trace'] as $key => $trace): ?>
+                                <div class="panel panel-default">
 
-                                <div class="accordion-heading clearfix">
-                                    <span class="accordion-toggle" data-toggle="collapse" data-parent="#acc<?= $eKey ?>" href="#trace<?= $eKey.$key?>-content">
-                                        <small class="linenum label label-info">@<?= $trace['line'] ?></small>
-                                        <a href="">
-                                            <?= $this->errFileName($trace['file']) ?>
-                                        </a>
-                                    </span>
-                                </div>
+                                    <div class="panel-heading">
+                                        <div class=" accordion-toggle" data-toggle="collapse" data-parent="#acc<?= $eKey ?>" href="#trace<?= $eKey.$key?>-content">
+                                            <?= $this->errContextLineColor($trace) ?>
+                                            <a><?= $this->errFileName($trace['file']) ?></a>
+                                        </div>
+                                    </div>
 
-                                <div id="trace<?= $eKey.$key?>-content" class="accordion-body collapse">
-                                    <div class="accordion-inner">
-                                        <?php if ($trace['documentation']): ?>
-                                            <header class="alert alert-info">
-                                                <?= nl2br($trace['documentation']) ?>
-                                            </header>
-                                        <?php endif ?>
-                                        <p class="well"><?= $this->errTraceMethod($trace) ?></p>
-                                        <?php if (isset($trace['line'])): ?>
-                                            <pre class="prettyprint linenums:<?= (key($trace['context']) + 1) ?> linenums lang-php" data-active-line="<?= $trace['line'] ?>">
+                                    <div id="trace<?= $eKey.$key ?>-content" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <?php if ($trace['documentation']): ?>
+                                                <header class="alert alert-info">
+                                                    <?= nl2br($trace['documentation']) ?>
+                                                </header>
+                                            <?php endif ?>
+                                            <blockquote>
+                                                <?= $this->errTraceMethod($trace) ?>
+                                            </blockquote>
+                                            <?php if (isset($trace['line'])): ?>
+<pre class="prettyprint linenums:<?= (key($trace['context']) + 1) ?> linenums lang-php" data-active-line="<?= $trace['line'] ?>">
 <?= implode($trace['context']) ?>
 </pre>
-                                        <?php endif ?>
+                                            <?php endif ?>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        <?php endforeach ?>
-                    </div>
-                <?php endif ?>
-
+                            <?php endforeach ?>
+                        </div>
+                    <?php endif ?>
+                </article>
             </section>
         <?php endforeach ?>
     </div>
-    <script type="text/javascript">
-        !function ($) {
-            $(function(){
-                if (window.prettyPrint) {
-                    prettyPrint();
-                    $('pre').each(function(){ // highlight the active line
-                        var lines      = $(this).find('li'),
-                            activeLine = parseInt($(this).attr('data-active-line')),
-                            firstLine  = parseInt(lines.first().attr('value'));
-
-                        lines.eq(activeLine - firstLine).addClass('active');
-                    });
-                }
-            });
-        }(window.jQuery);
-    </script>
+    <?php require __DIR__ . '/_footer.phtml' ?>
 <?php endif ?>

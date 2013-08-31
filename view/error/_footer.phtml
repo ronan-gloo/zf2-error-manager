@@ -1,0 +1,18 @@
+<script type="text/javascript">
+    !function ($) {
+        $(function(){
+            if (window.prettyPrint) {
+                prettyPrint();
+                $('pre').each(function(){ // highlight the active line
+                    var lines      = $(this).find('li'),
+                        activeLine = parseInt($(this).attr('data-active-line')),
+                        firstLine  = parseInt(lines.first().attr('value'));
+
+                    if (activeLine && firstLine) {
+                        lines.eq(activeLine - firstLine).addClass('active');
+                    }
+                });
+            }
+        });
+    }(window.jQuery);
+</script>

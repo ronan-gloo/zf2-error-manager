@@ -20,7 +20,7 @@ class TraceMethod extends AbstractHelper
         $pattern =
             '<strong class="text-info">%s</strong>'
             .'<var class="muted">%s</var>'
-            .'<span class="text-success">%s(<samp class="text-error">%s</samp>)</span>'
+            .'<span class="text-success">%s(<samp class="text-warning">%s</samp>)</span>'
         ;
 
         return sprintf($pattern,

@@ -6,6 +6,12 @@ namespace ErrorManager\Formatter;
  * Class ExceptionFormatter
  * @package ErrorManager\Formatter
  */
+use ErrorManager\Exception\ErrorException;
+
+/**
+ * Class ExceptionFormatter
+ * @package ErrorManager\Formatter
+ */
 class ExceptionFormatter implements FormatterInterface
 {
 
@@ -30,13 +36,15 @@ class ExceptionFormatter implements FormatterInterface
         $prevCount  = 0;
         $prevLength = $options['displayPrevious'];
         $displayDoc = $options['displayDocBlock'];
+        $errors     = [];
 
-        while($exception)
+        while($exception !== null)
         {
+            $isError  = $exception instanceof ErrorException;
             $errors[] =
             [
-                'name'          => get_class($exception),
-                'message'       => $exception->getMessage(),
+                'name'          => $isError ? $exception->getMessage() : get_class($exception),
+                'message'       => $isError ? get_class($exception) : $exception->getMessage(),
                 'file'          => $exception->getFile(),
                 'line'          => $exception->getLine(),
                 'trace'         => $this->formatTrace($exception, $options),
@@ -50,7 +58,6 @@ class ExceptionFormatter implements FormatterInterface
 
         return $errors;
     }
-
     /**
      * @param \Exception $exception
      * @param array      $options
@@ -72,9 +79,7 @@ class ExceptionFormatter implements FormatterInterface
                 break;
 
             if (isset($trace['class']) and class_exists($trace['class']) and isset($trace['file']))
-            {
                 $traces[] = $trace;
-            }
         }
 
         foreach ($traces as $key => $trace)

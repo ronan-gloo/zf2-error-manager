@@ -3,6 +3,7 @@
 namespace ErrorManager;
 
 use ErrorManager\Formatter\ExceptionFormatter;
+use Zend\ServiceManager\Config;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -26,7 +27,8 @@ class Factory implements FactoryInterface
 
         if (isset($config['error_manager']))
         {
-            $service->fromArray($config['error_manager']);
+            $config = new Configuration($config['error_manager']);
+            $service->setConfig($config);
         }
 
         $eventManager = $locator->get('application')->getEventManager();
