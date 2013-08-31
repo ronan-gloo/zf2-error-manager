@@ -19,6 +19,9 @@ return [
         // Convert errors to ErrorException: set the Level to catch here
         'convert_error'  => E_ALL,
 
+        // Github repo
+        'repository' => 'organisation/repository',
+
         // Extra assets
         'assets' =>
         [
@@ -32,15 +35,6 @@ return [
                 'http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js'
             ]
         ],
-
-        // Supports for exception submit button
-//        'vcf' =>
-//        [
-//            'github' =>
-//            [
-//                'url' => ''
-//            ],
-//        ]
     ],
 
     'service_manager' =>

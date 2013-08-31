@@ -29,6 +29,7 @@ class Configuration extends AbstractOptions
         'displayPrevious'   => true,
         'displayDocBlock'   => true,
         'assets'            => null,
+        'repository'        => ''
     ];
 
     /**
@@ -112,7 +113,6 @@ class Configuration extends AbstractOptions
         return $this->options['displayPrevious'];
     }
 
-
     /**
      * @param array $assets
      *
@@ -128,6 +128,23 @@ class Configuration extends AbstractOptions
     public function getAssets()
     {
         return $this->options['assets'];
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setRepository($name)
+    {
+        $this->options['repository'] = (string) $name;
+
+        return $this;
+    }
+
+    public function getRepository()
+    {
+        return $this->options['repository'];
     }
 
     /**
